@@ -26,6 +26,12 @@
 #include "jmorecfg.h"		/* seldom changed options */
 
 
+#ifdef __cplusplus
+#ifndef DONT_USE_EXTERN_C
+extern "C" {
+#endif
+#endif
+
 /* Version ID for the JPEG library.
  * Might be useful for tests like "#if JPEG_LIB_VERSION >= 60".
  */
@@ -900,6 +906,7 @@ typedef JMETHOD(boolean, jpeg_marker_parser_method, (j_decompress_ptr cinfo));
 #define jpeg_destroy_decompress	jDestDecompress
 #define jpeg_stdio_dest		jStdDest
 #define jpeg_stdio_src		jStdSrc
+#define jpeg_mem_src		jMemSrc
 #define jpeg_set_defaults	jSetDefaults
 #define jpeg_set_colorspace	jSetColorspace
 #define jpeg_default_colorspace	jDefColorspace
@@ -973,6 +980,11 @@ EXTERN(void) jpeg_destroy_decompress JPP((j_decompress_ptr cinfo));
 /* Caller is responsible for opening the file before and closing after. */
 EXTERN(void) jpeg_stdio_dest JPP((j_compress_ptr cinfo, FILE * outfile));
 EXTERN(void) jpeg_stdio_src JPP((j_decompress_ptr cinfo, FILE * infile));
+
+/* Data source and destination managers: memory buffers. */
+EXTERN(void) jpeg_mem_src JPP((j_decompress_ptr cinfo,
+			      unsigned char * inbuffer,
+			      unsigned long insize));
 
 /* Default parameter setup for compression */
 EXTERN(void) jpeg_set_defaults JPP((j_compress_ptr cinfo));
@@ -1179,6 +1191,12 @@ struct jpeg_color_quantizer { long dummy; };
 #ifdef JPEG_INTERNALS
 #include "jpegint.h"		/* fetch private declarations */
 #include "jerror.h"		/* fetch error codes too */
+#endif
+
+#ifdef __cplusplus
+#ifndef DONT_USE_EXTERN_C
+}
+#endif
 #endif
 
 #endif /* JPEGLIB_H */
